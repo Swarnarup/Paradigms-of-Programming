@@ -1,0 +1,79 @@
+#lang scheme
+
+
+"Q1"
+(define mn
+  (lambda (lst a)
+    (if (null? lst)
+        a
+        (if (> a (car lst))
+            (mn (cdr lst) (car lst))
+            (mn (cdr lst) a)))))
+
+
+(define min-ip
+  (lambda (lst)
+    (if (null? lst)
+        (display "invalid Input")
+        (mn (cdr lst) (car lst)))))
+
+
+
+"Q2"
+(define binary-gcd
+  (lambda (a b)
+    (let ((aa (remainder a 2)) (bb (remainder b 2)))
+      (cond ((= a 0) b)
+            ((= b 0) a)
+            ((and (= aa 0) (= bb 0)) (* 2 (binary-gcd (/ a 2) (/ b 2))))
+            ((and (= aa 0) (= bb 1)) (binary-gcd (/ a 2) b))
+            ((and (= aa 1) (= bb 0)) (binary-gcd a (/ b 2)))
+            ((and (= aa 1) (= bb 1)) (binary-gcd (abs (- a b)) (min a b)))))))
+
+
+
+
+
+"Q3"
+(define flatten
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        (if (list? (car lst))
+            (append (flatten (car lst)) (flatten (cdr lst)))
+            (cons (car lst) (flatten (cdr lst)))))))
+
+
+
+"Q4"
+
+
+
+" Do-While : Takes Proc as a display function which takes one argument"
+
+(define do-while
+  (lambda (proc start limit inc)
+    (proc start)
+    (let ((new_start (inc start)))
+    (if (> new_start limit)
+        (newline)
+        (do-while proc new_start limit inc)))))
+
+
+
+
+
+
+
+
+
+;" Do-While11 : Takes any procedure and executes"
+
+;(define do-while1
+;  (lambda (proc start limit inc)
+;    (display proc)
+;    (newline)
+;    (let ((new_start (inc start)))
+;    (if (> new_start limit)
+;        (newline)
+;        (do-while1 proc new_start limit inc)))))
