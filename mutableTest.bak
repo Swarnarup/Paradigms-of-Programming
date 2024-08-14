@@ -1,0 +1,22 @@
+#lang scheme
+
+
+(define aa (mcons 3 4))
+
+(define bb (mcons (mcar aa) 5))
+aa
+bb
+(set! aa 7)
+aa
+bb
+
+(define mix (cons 5(cons 4 (mcons 1 (mcons 2 '())))))
+
+mix
+
+(define (mlist . x)
+  (let((lst x))
+    (define (helper l)
+      (if(null? l)'()
+         (mcons (car l)(helper (cdr l)))))
+    (helper lst)))

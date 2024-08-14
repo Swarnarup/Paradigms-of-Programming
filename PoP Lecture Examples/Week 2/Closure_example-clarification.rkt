@@ -1,0 +1,26 @@
+#lang scheme
+
+
+; The following foo-counter always shows same value for count
+; Although one must notice that it does not return anything.
+; It prints Hello <Count> but it does not return <count>. It returns void.
+(define foo-counter
+                (let ((count 0))
+                   (lambda ()
+                     (set! count (+ count 1))
+                     (display "Hello ")
+                     (display count)
+                       (set! count 0))))
+
+
+; This boo-counter is similar to the above foo-counter, without the display statements.
+; In order to reset the value of count to 0, the last expression must reset its value to 1.
+; The procedure can either be made to reset value of count or return value of count,
+; however it cannot return value of count and go back to reset the value of count
+; Here one can clearly see that the procedure returns nothing
+(define boo-counter
+                (let ((count 0))
+                   (lambda ()
+                     (set! count (+ count 1))
+                     (display count)
+                       (set! count 0))))

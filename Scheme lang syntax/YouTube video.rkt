@@ -1,0 +1,111 @@
+#lang scheme
+
+"https://youtu.be/byofGyW2L10?si=6Qc-7-gIzhA6YO-3"
+
+
+(define lst '(1 2 33 5 11 2 9))
+
+(sort lst >)
+
+(define abc (list '/ 9 3))
+
+(cons (cons 1 2) (cons 3 4))
+
+"------- SET ----------"
+
+(define make-counter
+  (lambda ()
+    (define value 0)
+    (define counter
+      (lambda ()
+        (set! value (+ 1 value))
+        value))
+    counter))
+
+((make-counter))
+((make-counter))
+"  "
+(define my-cunt (make-counter))
+(my-cunt)
+(my-cunt)
+(my-cunt)
+
+
+"--------------"
+(list->string '(#\a #\b))
+(string->list "abcd")
+
+(define (shout display-fn txt)
+  (display-fn
+   (list->string
+    (map char-upcase (string->list txt)))))
+
+(shout display "txt")
+
+(define (test-shout-display)
+  (define displayed "")
+  (define (fake-display txt)
+    (set! displayed txt))
+
+  (shout fake-display "Hello Amy"))
+(test-shout-display)
+(newline)
+
+"------------CLASS like smulation----------"
+
+(define (make-balence)
+  (define value 0)
+  (define (bal-method method)
+    (define (add-method x) (set! value (+ x value)))
+    (define (get-method) value)
+    (cond ((equal? method "add") add-method)
+          ((equal? method "get") get-method)))
+  bal-method)
+
+(define bal1 (make-balence))
+((bal1 "add") 10)
+((bal1 "add") 5)
+((bal1 "get"))
+
+" --------- Recursion ------------"
+
+(define (fact n)
+  (define (helper op count)
+    (if (<= count 1)
+        op
+        (helper (* op count) (- count 1))))
+  (helper 1 n))
+
+(fact 5)
+
+
+"   ----------- Building Numbers ----------- "
+
+(define n0 (lambda () null))
+(define (minc x) (lambda () x))
+(define (mdec x) (x))
+
+(define n1 (minc n0))
+(define n2 (minc n1))
+(define n3 (minc n2))
+
+(define (mzero? x) (null? x))
+
+(define (mequal? x y)
+  (cond ((mzero? x)(mzero? y))
+        ((mzero? y)(mzero? x))
+        (else (mequal? (mdec x) (mdec y)))))
+
+(mzero? (n0))
+(mzero? n1)
+(mequal? n2 n3)
+(mequal? n2 n2)
+
+"numbers"
+
+(define (m+ x y)
+  (if (mzero? y)
+      x
+      (m+ (minc x) (mdec y))))
+
+(mequal? (m+ n2 n2) (m+ n1 n3))

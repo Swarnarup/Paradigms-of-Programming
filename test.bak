@@ -1,0 +1,183 @@
+#lang scheme
+
+
+(define (binary-gcd a b)
+  (if (= a b)
+      a
+      (let loop ((a (abs a)) (b (abs b)) (shift 0))
+        (cond
+          ((= a 0) b)
+          ((= b 0) a)
+          ((even? a) (if (even? b)
+                        (loop (quotient a 2) (quotient b 2) (+ shift 1))
+                        (loop (quotient a 2) b shift)))
+          ((even? b) (loop a (quotient b 2) shift))
+          (else (if (> a b)
+                    (loop (- a b) b shift)
+                    (loop a (- b a) shift)))))))
+
+; Example usage:
+(display (binary-gcd 24 36)) ; Output: 12
+(newline)
+
+
+(define as
+  (lambda (a b)
+    (+ a b)))
+
+
+
+
+
+(define (flatten-list lst)
+  (cond
+    ((null? lst) '()) ; Base case: empty list returns empty list
+    ((not (pair? lst)) (list lst)) ; Base case: if lst is not a pair, return a list containing lst
+    (else (append (flatten-list (car lst)) (flatten-list (cdr lst)))))) ; Recursive case: flatten car and cdr and append them
+
+; Example usage:
+(display (flatten-list '(4 6 8 (a 11 (12 camel)) 14))) ; Output: (4 6 8 a 11 12 camel 14)
+(newline)
+
+
+(define ls '(1 2 3))
+
+
+
+(define ft
+  (lambda (lst)
+    (if (null? lst)
+        '()
+        (if (list? (car lst))
+            (append (ft (car lst)) (ft (cdr lst)))
+            (cons (car lst) (ft (cdr lst)))))))
+
+
+
+(define do-while
+  (lambda (proc start limit inc)
+  ;  (display proc)
+ ;   (display "--")
+;    (display start)
+    (proc start)
+;    (newline)
+    (let ((new_start (inc start)))
+    (if (> new_start limit)
+        (newline)
+        (do-while proc new_start limit inc)))))
+
+
+(define (add x) (+ 1 x))
+(do-while (lambda (x) (newline) (display x)) 1 10 add)
+
+
+
+(define (do-while1 proc start limit inc)
+  (let loop ((current start))
+    (display (proc current)) ; Execute the procedure with the current value
+    (when (<= current limit)
+      (loop (inc current)))))
+
+;(do-while (lambda (x) (display x) (newline)) 1 5 add)
+
+
+
+
+
+
+
+"............. Assignment 2 .................. "
+
+(define repeated
+  (lambda (proc n)
+    (if (= n 1)
+        proc
+        (lambda (x) (proc ((repeated proc (- n 1)) x))))))
+
+
+(define (square x) (* x x))
+
+((repeated square 3) 2)
+
+
+
+(define list-reducer
+  (lambda (ll)
+  (if (null? ll)
+      '()
+      (if (= 2 (length (car ll)))
+          (cons (car ll) (list-reducer (cdr ll)))
+          (append '() (list-reducer (cdr ll)))))))
+
+(list-reducer  (list '(3 4) '(5 (6 8 7) 9) '(9 11)))
+
+
+
+
+(define anti-cdr
+  (lambda (lis)
+    (cond ((null? lis) '())
+          ((null? (cdr lis)) '())
+          (else (cons (car lis) (anti-cdr (cdr lis)))))))
+
+(anti-cdr  (list '(3 4) '(5 (6 8 7)) (list 9 11)))
+
+
+(define (my-cons a b)
+  (define (dispatch op)
+    (cond ((eq? op 'my-car) a)
+          ((eq? op 'my-cdr) b)
+          ((eq? op 'value) (* (expt 2 (+ a 1)) (expt 3 (+ b a))))
+          (else (error "unexpected" op))))
+  dispatch)
+
+
+
+
+
+" --------flatten----------- "
+
+(define (flatten seq)
+  (if (not (list? seq))
+      (list seq)
+      (apply append (map flatten seq))))
+
+(flatten '((1 2) 3 ((4)(5)) 6))
+(apply append '((1 2)(3 4)(5 (8 9) 6)))
+
+" ---------power set-----------"
+
+(define powerset
+  (lambda (set)
+    (if (null? set)
+        '(())
+        (append (powerset (cdr set))
+                (map (lambda (subset) (cons (car set) subset)) (powerset (cdr set)))))))
+
+(powerset '(1 2 3))
+
+(define x 10)
+(let* ((a x)
+      (b a))
+  (+ a b))
+
+"-------------------"
+
+(cons '(1 2) '(1 2))
+((lambda (x) (cons x x)) '(1 2))
+
+"------------"
+;(define umap
+ ; (lambda (fn seq)
+  ;  (if (null? seq)
+   ;     '()
+    ;    (cons (fn (car seq)) (umap fn (cdr seq))))))
+(map + '(1 2) '(1 2))
+(map * '(1) '(2))
+
+(define bar
+  (lambda (a b . c)
+    (list a b c)))
+
+(bar 1 2 3 4 5 6)
+(bar 1 2)
